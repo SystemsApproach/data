@@ -163,6 +163,8 @@ data so that the decompression half of the algorithm can do its job.
 Exactly how you build an adaptive dictionary has been a subject of
 extensive research.
 
+{% include "../sidebars/when-compress.md" %}
+
 ## Image Representation and Compression (GIF, JPEG)
 
 Given the ubiquitous use of digital imagery—this
