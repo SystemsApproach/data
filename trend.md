@@ -111,7 +111,9 @@ programmable pipelines described in
 provide a qualitatively deeper insights into traffic paterns and the
 root causes of network failures.
 
-> [!NOTE|label:Broader Perspective]
+<!--- > [!NOTE|label:Broader Perspective] --->
+> **Broader Perspective**
+>
 > To continue reading about the cloudification of the Internet, see
 > [Blockchain and a Decentralized Internet](../security/trend.md).
 >
