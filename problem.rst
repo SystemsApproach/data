@@ -1,20 +1,16 @@
-# {{ page.title }}
+Problem: What Do We Do with the Data?
+-------------------------------------
 
-> It is a capital mistake to theorize before one has data. *—Sir Arthur
-> Conan Doyle*
-
-## Problem: What Do We Do with the Data?
-
-From the network's perspective, application programs send messages to
+From the network’s perspective, application programs send messages to
 each other. Each of these messages is just an uninterpreted string of
-bytes. From the application's perspective, however, these messages
-contain various kinds of *data*—arrays of integers, video frames,
-lines of text, digital images, and so on. In other words, these bytes
-have meaning. We now consider the problem of how best to encode the
-different kinds of data that application programs want to exchange into
-byte strings. In many respects, this is similar to the problem of
-encoding byte strings into electromagnetic signals that we saw in an
-earlier chapter.
+bytes. From the application’s perspective, however, these messages
+contain various kinds of *data*\ —arrays of integers, video frames, lines
+of text, digital images, and so on. In other words, these bytes have
+meaning. We now consider the problem of how best to encode the different
+kinds of data that application programs want to exchange into byte
+strings. In many respects, this is similar to the problem of encoding
+byte strings into electromagnetic signals that we saw in an earlier
+chapter.
 
 Thinking back to our discussion of encoding, there are essentially two
 concerns. The first is that the receiver be able to extract the same
@@ -47,7 +43,7 @@ correctly by the receiver, and doing so in a way that does not overwhelm
 the network with massive amounts of multimedia data.
 
 Compression and, more generally, the efficiency of encoding have a rich
-history, dating back to Shannon's pioneering work on information theory
+history, dating back to Shannon’s pioneering work on information theory
 in the 1940s. In effect, there are two opposing forces at work here. In
 one direction, you would like as much redundancy in the data as possible
 so that the receiver is able to extract the right data even if errors
@@ -57,20 +53,20 @@ for exactly this purpose. In the other direction, we would like to
 remove as much redundancy from the data as possible so that we may
 encode it in as few bits as possible. It turns out the multimedia data
 offers a wealth of opportunities for compression because of the way our
-senses and brains process visual and auditory signals. We don't hear
-high frequencies as well as lower ones, and we don't notice fine detail
+senses and brains process visual and auditory signals. We don’t hear
+high frequencies as well as lower ones, and we don’t notice fine detail
 as much as the bigger picture in an image, especially if the image is
 moving.
 
-Compression is important to the designers of networks for many
-reasons, not just because we rarely find ourselves with an abundance of
-bandwidth everywhere in the network. For example, the way we design a
-compression algorithm affects our sensitivity to lost or delayed data
-and thus may influence the design of resource allocation mechanisms and
-end-to-end protocols. Conversely, if the underlying network is unable to
-guarantee a fixed amount of bandwidth for the duration of a
-videoconference, we may choose to design compression algorithms that can
-adapt to changing network conditions.
+Compression is important to the designers of networks for many reasons,
+not just because we rarely find ourselves with an abundance of bandwidth
+everywhere in the network. For example, the way we design a compression
+algorithm affects our sensitivity to lost or delayed data and thus may
+influence the design of resource allocation mechanisms and end-to-end
+protocols. Conversely, if the underlying network is unable to guarantee
+a fixed amount of bandwidth for the duration of a videoconference, we
+may choose to design compression algorithms that can adapt to changing
+network conditions.
 
 Finally, an important aspect of both presentation formatting and data
 compression is that they require the sending and receiving hosts to

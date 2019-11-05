@@ -1,53 +1,54 @@
-# {{ page.title }}
+7.2 Multimedia Data
+===================
 
 Multimedia data, comprised of audio, video, and still images, now makes
 up the majority of traffic on the Internet. Part of what has made the
 widespread transmission of multimedia across networks possible is
-advances in compression technology. Because multimedia data is
-consumed mostly by humans using their senses—vision and hearing—and
-processed by the human brain, there are unique challenges to
-compressing it. You want to try to keep the information that is most
-important to a human, while getting rid of anything that doesn't
-improve the human's perception of the visual or auditory experience.
-Hence, both computer science and the study of human perception come
-into play. In this section, we'll look at some of the major efforts in
-representing and compressing multimedia data.
+advances in compression technology. Because multimedia data is consumed
+mostly by humans using their senses—vision and hearing—and processed by
+the human brain, there are unique challenges to compressing it. You want
+to try to keep the information that is most important to a human, while
+getting rid of anything that doesn’t improve the human’s perception of
+the visual or auditory experience. Hence, both computer science and the
+study of human perception come into play. In this section, we’ll look at
+some of the major efforts in representing and compressing multimedia
+data.
 
-The uses of compression are not limited to multimedia data of
-course—for example, you may well have used a utility like `zip` or
-`compress` to compress files before sending them over a network, or to
-uncompress a data file after downloading. It turns out that the
-techniques used for compressing data—which are typically *lossless*,
-because most people don't like to lose data from a file—also show up
-as part of the solution for multimedia compression. In contrast, *lossy
-compression*, commonly used for multimedia data, does not promise that
-the data received is exactly the same as the data sent. As noted above,
-this is because multimedia data often contains information that is of
-little utility to the human who receives it. Our senses and brains can
-only perceive so much detail. They are also very good at filling in
-missing pieces and even correcting some errors in what we see or hear.
-And, lossy algorithms typically achieve much better compression ratios
-than do their lossless counterparts; they can be an order of magnitude
-better or more.
+The uses of compression are not limited to multimedia data of course—for
+example, you may well have used a utility like ``zip`` or ``compress``
+to compress files before sending them over a network, or to uncompress a
+data file after downloading. It turns out that the techniques used for
+compressing data—which are typically *lossless*, because most people
+don’t like to lose data from a file—also show up as part of the solution
+for multimedia compression. In contrast, *lossy compression*, commonly
+used for multimedia data, does not promise that the data received is
+exactly the same as the data sent. As noted above, this is because
+multimedia data often contains information that is of little utility to
+the human who receives it. Our senses and brains can only perceive so
+much detail. They are also very good at filling in missing pieces and
+even correcting some errors in what we see or hear. And, lossy
+algorithms typically achieve much better compression ratios than do
+their lossless counterparts; they can be an order of magnitude better or
+more.
 
 To get a sense of how important compression has been to the spread of
 networked multimedia, consider the following example. A high-definition
-TV screen has something like 1080 $$\times$$ 1920 pixels, each of which
-has 24 bits of color information, so each frame is
+TV screen has something like 1080 × 1920 pixels, each of which has 24
+bits of color information, so each frame is
 
-$$
-1080 \times 1920 \times 24 = 50\ Mb
-$$
+.. math::
+
+   1080 \times 1920 \times 24 = 50\ Mb
 
 so if you want to send 24 frames per second, that would be over 1 Gbps.
-That's a lot more than most Internet users have access to, by a good
+That’s a lot more than most Internet users have access to, by a good
 margin. By contrast, modern compression techniques can get a reasonably
 high-quality HDTV signal down to the range of 10 Mbps, a two order of
 magnitude reduction and well within the reach of many broadband users.
 Similar compression gains apply to lower quality video such as YouTube
-clips—Web video could never have reached its current popularity
-without compression to make all those entertaining videos fit within the
-bandwidth of today's networks.
+clips—Web video could never have reached its current popularity without
+compression to make all those entertaining videos fit within the
+bandwidth of today’s networks.
 
 Compression techniques as applied to multimedia have been an area of
 great innovation in recent years, particularly lossy compression.
@@ -56,31 +57,33 @@ Indeed, most of the lossy techniques include some steps that are
 lossless, so we begin our discussion with an overview of lossless
 compression.
 
-## Lossless Compression Techniques
+Lossless Compression Techniques
+-------------------------------
 
 In many ways, compression is inseparable from data encoding. When
 thinking about how to encode a piece of data in a set of bits, we might
 just as well think about how to encode the data in the smallest set of
 bits possible. For example, if you have a block of data that is made up
-of the 26 symbols A through Z, and if all of these symbols have an
-equal chance of occurring in the data block you are encoding, then
-encoding each symbol in 5 bits is the best you can do (since 2$$^5$$ = 32
+of the 26 symbols A through Z, and if all of these symbols have an equal
+chance of occurring in the data block you are encoding, then encoding
+each symbol in 5 bits is the best you can do (since 2\ :sup:`5` = 32 
 is the lowest power of 2 above 26). If, however, the symbol R occurs
 50% of the time, then it would be a good idea to use fewer bits to
-encode the R than any of the other symbols. In general, if you know
-the relative probability that each symbol will occur in the data, then
-you can assign a different number of bits to each possible symbol in a
-way that minimizes the number of bits it takes to encode a given block
-of data. This is the essential idea of *Huffman codes*, one of the
+encode the R than any of the other symbols. In general, if you know the
+relative probability that each symbol will occur in the data, then you
+can assign a different number of bits to each possible symbol in a way
+that minimizes the number of bits it takes to encode a given block of
+data. This is the essential idea of *Huffman codes*, one of the
 important early developments in data compression.
 
-### Run Length Encoding
+Run Length Encoding
+~~~~~~~~~~~~~~~~~~~
 
 Run length encoding (RLE) is a compression technique with a brute-force
 simplicity. The idea is to replace consecutive occurrences of a given
 symbol with only one copy of the symbol, plus a count of how many times
-that symbol occurs—hence, the name *run length*. For example, the
-string `AAABBCDDDD` would be encoded as `3A2B1C4D`.
+that symbol occurs—hence, the name *run length*. For example, the string
+``AAABBCDDDD`` would be encoded as ``3A2B1C4D``.
 
 RLE turns out to be useful for compressing some classes of images. It
 can be used in this context by comparing adjacent pixel values and then
@@ -88,28 +91,29 @@ encoding only the changes. For images that have large homogeneous
 regions, this technique is quite effective. For example, it is not
 uncommon that RLE can achieve compression ratios on the order of 8-to-1
 for scanned text images. RLE works well on such files because they often
-contain a large amount of white space that can be removed. For those
-old enough to remember the technology, RLE was the key compression
-algorithm used to transmit faxes. However, for
-images with even a small degree of local variation, it is not uncommon
-for compression to actually increase the image byte size, since it takes
-2 bytes to represent a single symbol when that symbol is not repeated.
+contain a large amount of white space that can be removed. For those old
+enough to remember the technology, RLE was the key compression algorithm
+used to transmit faxes. However, for images with even a small degree of
+local variation, it is not uncommon for compression to actually increase
+the image byte size, since it takes 2 bytes to represent a single symbol
+when that symbol is not repeated.
 
-### Differential Pulse Code Modulation
+Differential Pulse Code Modulation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Another simple lossless compression algorithm is Differential Pulse Code
 Modulation (DPCM). The idea here is to first output a reference symbol
 and then, for each symbol in the data, to output the difference between
-that symbol and the reference symbol. For example, using symbol
-A as the reference symbol, the string `AAABBCDDDD` would be encoded as
-`A0001123333` because A is the same as the reference symbol, B has a
+that symbol and the reference symbol. For example, using symbol A as the
+reference symbol, the string ``AAABBCDDDD`` would be encoded as
+``A0001123333`` because A is the same as the reference symbol, B has a
 difference of 1 from the reference symbol, and so on. Note that this
 simple example does not illustrate the real benefit of DPCM, which is
-that when the differences are small they can be encoded with fewer
-bits than the symbol itself. In this example, the range of
-differences, 0-3, can be represented with 2 bits each, rather than the
-7 or 8 bits required by the full character. As soon as the difference
-becomes too large, a new reference symbol is selected.
+that when the differences are small they can be encoded with fewer bits
+than the symbol itself. In this example, the range of differences, 0-3,
+can be represented with 2 bits each, rather than the 7 or 8 bits
+required by the full character. As soon as the difference becomes too
+large, a new reference symbol is selected.
 
 DPCM works better than RLE for most digital imagery, since it takes
 advantage of the fact that adjacent pixels are usually similar. Due to
@@ -122,17 +126,18 @@ an audio waveform are likely to be close in value.
 
 A slightly different approach, called *delta encoding*, simply encodes a
 symbol as the difference from the previous one. Thus, for example,
-`AAABBCDDDD` would be represented as `A001011000`. Note that delta
+``AAABBCDDDD`` would be represented as ``A001011000``. Note that delta
 encoding is likely to work well for encoding images where adjacent
 pixels are similar. It is also possible to perform RLE after delta
 encoding, since we might find long strings of 0s if there are many
 similar symbols next to each other.
 
-### Dictionary-Based Methods
+Dictionary-Based Methods
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 The final lossless compression method we consider is the
 dictionary-based approach, of which the Lempel-Ziv (LZ) compression
-algorithm is the best known. The Unix `compress` and `gzip` commands
+algorithm is the best known. The Unix ``compress`` and ``gzip`` commands
 use variants of the LZ algorithm.
 
 The idea of a dictionary-based compression algorithm is to build a
@@ -144,13 +149,13 @@ characters in text data, you could treat each word as a string and
 output the index in the dictionary for that word. To further elaborate
 on this example, the word *compression* has the index 4978 in one
 particular dictionary; it is the 4978th word in . To compress a body of
-text, each time the string "compression" appears, it would be replaced
+text, each time the string “compression” appears, it would be replaced
 by 4978. Since this particular dictionary has just over 25,000 words in
 it, it would take 15 bits to encode the index, meaning that the string
-"compression" could be represented in 15 bits rather than the 77 bits
+“compression” could be represented in 15 bits rather than the 77 bits
 required by 7-bit ASCII. This is a compression ratio of 5-to-1! At
 another data point, we were able to get a 2-to-1 compression ratio when
-we applied the `compress` command to the source code for the protocols
+we applied the ``compress`` command to the source code for the protocols
 described in this book.
 
 Of course, this leaves the question of where the dictionary comes from.
@@ -163,22 +168,23 @@ data so that the decompression half of the algorithm can do its job.
 Exactly how you build an adaptive dictionary has been a subject of
 extensive research.
 
-{% include "../sidebars/when-compress.md" %}
+.. include:: ../sidebars/when-compress.rst
 
-## Image Representation and Compression (GIF, JPEG)
+Image Representation and Compression (GIF, JPEG)
+------------------------------------------------
 
-Given the ubiquitous use of digital imagery—this
-use was spawned by the invention of graphical displays, not high-speed
-networks—the need for standard representation formats and compression
-algorithms for digital imagery data has become essential. In
-response to this need, the ISO defined a digital image format known as
-*JPEG*, named after the Joint Photographic Experts Group that designed
-it. (The "Joint" in JPEG stands for a joint ISO/ITU effort.) JPEG is the
-most widely used format for still images in use today. At the heart of
-the definition of the format is a compression algorithm, which we
-describe below. Many techniques used in JPEG also appear in MPEG, the
-set of standards for video compression and transmission created by the
-Moving Picture Experts Group.
+Given the ubiquitous use of digital imagery—this use was spawned by the
+invention of graphical displays, not high-speed networks—the need for
+standard representation formats and compression algorithms for digital
+imagery data has become essential. In response to this need, the ISO
+defined a digital image format known as *JPEG*, named after the Joint
+Photographic Experts Group that designed it. (The “Joint” in JPEG stands
+for a joint ISO/ITU effort.) JPEG is the most widely used format for
+still images in use today. At the heart of the definition of the format
+is a compression algorithm, which we describe below. Many techniques
+used in JPEG also appear in MPEG, the set of standards for video
+compression and transmission created by the Moving Picture Experts
+Group.
 
 Before delving into the details of JPEG, we observe that there are quite
 a few steps to get from a digital image to a compressed representation
@@ -203,23 +209,22 @@ moment.
 
 The significance of this discussion is that the encoding and
 transmission of color images (either still or moving) requires agreement
-between the two ends on the color space. Otherwise, of course, you'd end
+between the two ends on the color space. Otherwise, of course, you’d end
 up with different colors being displayed by the receiver than were
 captured by the sender. Hence, agreeing on a color space definition (and
 perhaps a way to communicate which particular space is in use) is part
 of the definition of any image or video format.
 
-Let's look at the example of the Graphical Interchange Format (GIF). GIF
+Let’s look at the example of the Graphical Interchange Format (GIF). GIF
 uses the RGB color space and starts out with 8 bits to represent each of
 the three dimensions of color for a total of 24 bits. Rather than
 sending those 24 bits per pixel, however, GIF first reduces 24-bit color
 images to 8-bit color images. This is done by identifying the colors
 used in the picture, of which there will typically be considerably fewer
-than 2$$^{24}$$, and then picking the 256 colors that most closely
-approximate the colors used in the picture. There might be more than 256
-colors, however, so the trick is to try not to distort the color too
-much by picking 256 colors such that no pixel has its color changed too
-much.
+than 2\ :sup:`24`, and then picking the 256 colors that most closely 
+approximate the colors used in the picture. There might be more than 256 
+colors, however, so the trick is to try not to distort the color too much 
+by picking 256 colors such that no pixel has its color changed too much.
 
 The 256 colors are stored in a table, which can be indexed with an 8-bit
 number, and the value for each pixel is replaced by the appropriate
@@ -241,7 +246,7 @@ not reduce the number of colors like GIF. Instead, JPEG starts off by
 transforming the RGB colors (which are what you usually get out of a
 digital camera) to the YUV space. The reason for this has to do with the
 way the eye perceives images. There are receptors in the eye for
-brightness, and separate receptors for color. Because we're very good at
+brightness, and separate receptors for color. Because we’re very good at
 perceiving variations in brightness, it makes sense to spend more bits
 on transmitting brightness information. Since the Y component of YUV is,
 roughly, the brightness of the pixel, we can compress that component
@@ -249,122 +254,122 @@ separately, and less aggressively, from the other two (chrominance)
 components.
 
 As noted above, YUV and RGB are alternative ways to describe a point in
-a 3-dimensional space, and it's possible to convert from one color space
+a 3-dimensional space, and it’s possible to convert from one color space
 to another using linear equations. For one YUV space that is commonly
 used to represent digital images, the equations are:
 
-```pseudo
-Y = 0.299R + 0.587G + 0.114B
-U = (B-Y) x 0.565
-V =  (R-Y) x 0.713
-```
+::
 
-The exact values of the
-constants here are not important, as long as the encoder and decoder
-agree on what they are. (The decoder will have to apply the inverse
-transformations to recover the RGB components needed to drive a
-display.) The constants are, however, carefully chosen based on the
-human perception of color. You can see that Y, the luminance, is a sum
-of the red, green, and blue components, while U and V are color
+   Y = 0.299R + 0.587G + 0.114B
+   U = (B-Y) x 0.565
+   V =  (R-Y) x 0.713
+
+The exact values of the constants here are not important, as long as the
+encoder and decoder agree on what they are. (The decoder will have to
+apply the inverse transformations to recover the RGB components needed
+to drive a display.) The constants are, however, carefully chosen based
+on the human perception of color. You can see that Y, the luminance, is
+a sum of the red, green, and blue components, while U and V are color
 difference components. U represents the difference between the luminance
 and blue, and V the difference between luminance and red. You may notice
 that setting R, G, and B to their maximum values (which would be 255 for
-8-bit representations) will also produce a value of Y=255 while U and
-V in this case would be zero. That is, a fully white pixel is
+8-bit representations) will also produce a value of Y=255 while U and V
+in this case would be zero. That is, a fully white pixel is
 (255,255,255) in RGB space and (255,0,0) in YUV space.
 
-<figure class="line">
-	<a id="yuvsub"></a>
-	<img src="figures/f07-11-9780123850591.png" width="500px"/>
-	<figcaption>Subsampling the U and V components of an
-    image.</figcaption>
-</figure>
+.. _fig-yuvsub:
+.. figure:: figures/f07-11-9780123850591.png
+   :width: 500px
+   :align: center
+
+   Subsampling the U and V components of an image.
 
 Once the image has been transformed into YUV space, we can now think
-about compressing each of the three components separately. We want to be
-more aggressive in compressing the U and V components, to which human
-eyes are less sensitive. One way to compress the U and V components is
-to *subsample* them. The basic idea of subsampling is to take a number
-of adjacent pixels, calculate the average U or V value for that group of
-pixels, and transmit that, rather than sending the value for every
-pixel. [Figure 1](#yuvsub) illustrates the point. The luminance (Y)
-component is not subsampled, so the Y value of all the pixels will be
-transmitted, as indicated by the 16 $$\times$$ 16 grid of pixels on the
-left. In the case of U and V, we treat each group of four adjacent
-pixels as a group, calculate the average of the U or V value for that
-group, and transmit that. Hence, we end up with an 8 $$\times$$ 8 grid of
-U and V values to transmit. Thus, in this example, for every four
-pixels, we transmit six values (four Y and one each of U and V) rather
-than the original 12 values (four each for all three components), for a
-50% reduction in information.
+about compressing each of the three components separately. We want to
+be more aggressive in compressing the U and V components, to which
+human eyes are less sensitive. One way to compress the U and V
+components is to *subsample* them. The basic idea of subsampling is to
+take a number of adjacent pixels, calculate the average U or V value
+for that group of pixels, and transmit that, rather than sending the
+value for every pixel. :numref:`Figure %s <fig-yuvsub>` illustrates
+the point. The luminance (Y) component is not subsampled, so the Y
+value of all the pixels will be transmitted, as indicated by the 16 ×
+16 grid of pixels on the left. In the case of U and V, we treat each
+group of four adjacent pixels as a group, calculate the average of the
+U or V value for that group, and transmit that. Hence, we end up with
+an 8 × 8 grid of U and V values to transmit. Thus, in this example,
+for every four pixels, we transmit six values (four Y and one each of
+U and V) rather than the original 12 values (four each for all three
+components), for a 50% reduction in information.
 
-It's worth noting that you could be either more or less aggressive in
+It’s worth noting that you could be either more or less aggressive in
 the subsampling, with corresponding increases in compression and
 decreases in quality. The subsampling approach shown here, in which
 chrominance is subsampled by a factor of two in both horizontal and
 vertical directions (and which goes by the identification 4:2:0),
 happens to match the most common approach used for both JPEG and MPEG.
 
-<figure class="line">
-	<a id="jpeg"></a>
-	<img src="figures/f07-12-9780123850591.png" width="550px"/>
-	<figcaption>Block diagram of JPEG compression.</figcaption>
-</figure>
+.. _fig-jpeg:
+.. figure:: figures/f07-12-9780123850591.png
+   :width: 550px
+   :align: center
+
+   Block diagram of JPEG compression.
 
 Once subsampling is done, we now have three grids of pixels to deal
 with, and each one is dealt with separately. JPEG compression of each
-component takes place in three phases, as illustrated in
-[Figure 2](#jpeg). On the compression side, the image is fed through
-these three phases one 8 $$\times$$ 8 block at a time. The first phase
-applies the discrete cosine transform (DCT) to the block. If you think
-of the image as a signal in the spatial domain, then DCT transforms this
-signal into an equivalent signal in the *spatial frequency* domain. This
-is a lossless operation but a necessary precursor to the next, lossy
-step. After the DCT, the second phase applies a quantization to the
-resulting signal and, in so doing, loses the least significant
-information contained in that signal. The third phase encodes the final
-result, but in so doing also adds an element of lossless compression to
-the lossy compression achieved by the first two phases. Decompression
-follows these same three phases, but in reverse order.
+component takes place in three phases, as illustrated in :numref:`Figure
+%s <fig-jpeg>`. On the compression side, the image is fed through these
+three phases one 8 × 8 block at a time. The first phase applies the
+discrete cosine transform (DCT) to the block. If you think of the image
+as a signal in the spatial domain, then DCT transforms this signal into
+an equivalent signal in the *spatial frequency* domain. This is a
+lossless operation but a necessary precursor to the next, lossy step.
+After the DCT, the second phase applies a quantization to the resulting
+signal and, in so doing, loses the least significant information
+contained in that signal. The third phase encodes the final result, but
+in so doing also adds an element of lossless compression to the lossy
+compression achieved by the first two phases. Decompression follows
+these same three phases, but in reverse order.
 
-### DCT Phase
+DCT Phase
+~~~~~~~~~
 
 DCT is a transformation closely related to the fast Fourier transform
-(FFT). It takes an 8 $$\times$$ 8 matrix of pixel values as input and
-outputs an 8 $$\times$$ 8 matrix of frequency coefficients. You can think of
-the input matrix as a 64-point signal that is defined in two spatial
-dimensions ($$x$$ and $$y$$); DCT breaks this signal into 64 spatial
-frequencies. To get an intuitive feel for spatial frequency, imagine
-yourself moving across a picture in, say, the $$x$$ direction. You would
-see the value of each pixel varying as some function of $$x$$. If this
-value changes slowly with increasing $$x$$, then it has a low spatial
-frequency; if it changes rapidly, it has a high spatial frequency. So
-the low frequencies correspond to the gross features of the picture,
-while the high frequencies correspond to fine detail. The idea behind
-the DCT is to separate the gross features, which are essential to
-viewing the image, from the fine detail, which is less essential and, in
-some cases, might be barely perceived by the eye.
+(FFT). It takes an 8 × 8 matrix of pixel values as input and outputs an
+8 × 8 matrix of frequency coefficients. You can think of the input
+matrix as a 64-point signal that is defined in two spatial dimensions
+(*x* and *y*); DCT breaks this signal into 64 spatial frequencies. To
+get an intuitive feel for spatial frequency, imagine yourself moving
+across a picture in, say, the *x* direction. You would see the value of
+each pixel varying as some function of *x*. If this value changes slowly
+with increasing *x*, then it has a low spatial frequency; if it changes
+rapidly, it has a high spatial frequency. So the low frequencies
+correspond to the gross features of the picture, while the high
+frequencies correspond to fine detail. The idea behind the DCT is to
+separate the gross features, which are essential to viewing the image,
+from the fine detail, which is less essential and, in some cases, might
+be barely perceived by the eye.
 
 DCT, along with its inverse, which recovers the original pixels and
 during decompression, are defined by the following formulas:
 
-$$
-\begin{aligned}
-DCT(i,j) &=&  \frac{1}{\sqrt{2N}} C(i) C(j) \sum_{x=0}^{N-1}
- \sum_{y=0}^{N-1} pixel(x, y) 
- \cos \left[ \frac{(2x+1)i \pi}{2N}\right]
- \cos \left[ \frac{(2y+1)j \pi}{2N}\right]\\
-\mathit{pixel}(x,y) &=&  \frac{1}{\sqrt{2N}} \sum_{i=0}^{N-1}
- \sum_{j=0}^{N-1} C(i) C(j) DCT(i, j) 
- \cos \left[ \frac{(2x+1)i \pi}{2N}\right]
- \cos \left[ \frac{(2y+1)j \pi}{2N}\right]
-\end{aligned}
-$$
+.. math::
 
-where $$C(x) = 1/\sqrt{2}$$ when $$x=0$$ and $$1$$ when
-$$x>0$$, and $$pixel(x,y)$$ is the grayscale value of the
-pixel at position $$(x,y)$$ in the 8 $$\times$$ 8 block being
-compressed; N = 8 in this case.
+   \begin{aligned}
+   DCT(i,j) &=&  \frac{1}{\sqrt{2N}} C(i) C(j) \sum_{x=0}^{N-1}
+    \sum_{y=0}^{N-1} pixel(x, y) 
+    \cos \left[ \frac{(2x+1)i \pi}{2N}\right]
+    \cos \left[ \frac{(2y+1)j \pi}{2N}\right]\\
+   \mathit{pixel}(x,y) &=&  \frac{1}{\sqrt{2N}} \sum_{i=0}^{N-1}
+    \sum_{j=0}^{N-1} C(i) C(j) DCT(i, j) 
+    \cos \left[ \frac{(2x+1)i \pi}{2N}\right]
+    \cos \left[ \frac{(2y+1)j \pi}{2N}\right]
+   \end{aligned}
+
+where :math:`C(x) = 1/\sqrt{2}` when :math:`x=0` and :math:`1` when 
+:math:`x>0`, and :math:`pixel(x,y)` is the grayscale value of the pixel 
+at position *(x,y)* in the 8 × 8 block being compressed; N = 8 in this case.
 
 The first frequency coefficient, at location (0,0) in the output matrix,
 is called the *DC coefficient*. Intuitively, we can see that the DC
@@ -379,109 +384,123 @@ increasingly unimportant to the perceived quality of the image. It is
 the second phase of JPEG that decides which portion of which
 coefficients to throw away.
 
-### Quantization Phase
+Quantization Phase
+~~~~~~~~~~~~~~~~~~
 
 The second phase of JPEG is where the compression becomes lossy. DCT
 does not itself lose information; it just transforms the image into a
 form that makes it easier to know what information to remove. (Although
 not lossy, *per se*, there is of course some loss of precision during
 the DCT phase because of the use of fixed-point arithmetic.)
-Quantization is easy to understand—it's simply a matter of dropping
-the insignificant bits of the frequency coefficients.
+Quantization is easy to understand—it’s simply a matter of dropping the
+insignificant bits of the frequency coefficients.
 
 To see how the quantization phase works, imagine that you want to
-compress some whole numbers less than 100, such as 45, 98, 23, 66,
-and 7. If you decided that knowing these numbers truncated to the nearest
+compress some whole numbers less than 100, such as 45, 98, 23, 66, and
+7. If you decided that knowing these numbers truncated to the nearest
 multiple of 10 is sufficient for your purposes, then you could divide
-each number by the quantum 10 using integer arithmetic,
-yielding 4, 9, 2, 6, and 0. These numbers can each be encoded in
-4 bits rather than the 7 bits needed to encode the original numbers.
+each number by the quantum 10 using integer arithmetic, yielding 4, 9,
+2, 6, and 0. These numbers can each be encoded in 4 bits rather than the
+7 bits needed to encode the original numbers.
 
-<a id="quant"></a>
+.. _tab-quant:
+.. table::  Example JPEG Quantization Table. 
+   :widths: auto
+   :align: center
 
-| Quantum |   |   |   |   |   |   |   |
-|---:|---:|---:|---:|---:|---:|---:|---:|
-| 3 | 5 | 7 | 9 | 11 | 13 | 15 | 17 |
-| 5 | 7 | 9 | 11 | 13 | 15 | 17 | 19 
-| 7 | 9 | 11 | 13 | 15 | 17 | 19 | 21 |
-| 9 | 11 | 13 | 15 | 17 | 19 | 21 | 23 |
-| 11 | 13 | 15 | 17 | 19 | 21 | 23 | 25 |
-| 13 | 15 | 17 | 19 | 21 | 23 | 25 | 27 |
-| 15 | 17 | 19 | 21 | 23 | 25 | 27 | 29 |
-| 17 | 19 | 21 | 23 | 25 | 27 | 29 | 31 |
+   +---------+----+----+----+----+----+----+----+
+   | Quantum |    |    |    |    |    |    |    |
+   +=========+====+====+====+====+====+====+====+
+   | 3       | 5  | 7  | 9  | 11 | 13 | 15 | 17 |
+   +---------+----+----+----+----+----+----+----+
+   | 5       | 7  | 9  | 11 | 13 | 15 | 17 | 19 |
+   +---------+----+----+----+----+----+----+----+
+   | 7       | 9  | 11 | 13 | 15 | 17 | 19 | 21 |
+   +---------+----+----+----+----+----+----+----+
+   | 9       | 11 | 13 | 15 | 17 | 19 | 21 | 23 |
+   +---------+----+----+----+----+----+----+----+
+   | 11      | 13 | 15 | 17 | 19 | 21 | 23 | 25 |
+   +---------+----+----+----+----+----+----+----+
+   | 13      | 15 | 17 | 19 | 21 | 23 | 25 | 27 |
+   +---------+----+----+----+----+----+----+----+
+   | 15      | 17 | 19 | 21 | 23 | 25 | 27 | 29 |
+   +---------+----+----+----+----+----+----+----+
+   | 17      | 19 | 21 | 23 | 25 | 27 | 29 | 31 |
+   +---------+----+----+----+----+----+----+----+
 
-{% center %} *Table 1. Example JPEG Quantization Table.* {% endcenter %}
-
-Rather than using the same quantum for all 64 coefficients, JPEG uses a
-quantization table that gives the quantum to use for each of the
-coefficients, as specified in the formula given below. You can think of
-this table (`Quantum`) as a parameter that can be set to control how
-much information is lost and, correspondingly, how much compression is
-achieved. In practice, the JPEG standard specifies a set of quantization
-tables that have proven effective in compressing digital images; an
-example quantization table is given in [Table 1](#quant). In tables
-like this one, the low coefficients have a quantum close to 1 (meaning
-that little low-frequency information is lost) and the high coefficients
-have larger values (meaning that more high-frequency information is
+Rather than using the same quantum for all 64 coefficients, JPEG uses
+a quantization table that gives the quantum to use for each of the
+coefficients, as specified in the formula given below. You can think
+of this table (``Quantum``) as a parameter that can be set to control
+how much information is lost and, correspondingly, how much
+compression is achieved. In practice, the JPEG standard specifies a
+set of quantization tables that have proven effective in compressing
+digital images; an example quantization table is given in
+:numref:`Table %s <tab-quant>`. In tables like this one, the low
+coefficients have a quantum close to 1 (meaning that little
+low-frequency information is lost) and the high coefficients have
+larger values (meaning that more high-frequency information is
 lost). Notice that as a result of such quantization tables many of the
 high-frequency coefficients end up being set to 0 after quantization,
 making them ripe for further compression in the third phase.
 
 The basic quantization equation is
 
-```pseudo
-QuantizedValue(i,j) = IntegerRound(DCT(i,j), Quantum(i,j))
-```
+::
+
+   QuantizedValue(i,j) = IntegerRound(DCT(i,j), Quantum(i,j))
 
 where
 
-```pseudo
-IntegerRound(x) =
-    Floor(x + 0.5) if x >= 0
-    Floor(x - 0.5) if x < 0 	
-```
+::
+
+   IntegerRound(x) =
+       Floor(x + 0.5) if x >= 0
+       Floor(x - 0.5) if x < 0     
 
 Decompression is then simply defined as
 
-```pseudo
-DCT(i,j) = QuantizedValue(i,j) x Quantum(i,j)
-```
+::
+
+   DCT(i,j) = QuantizedValue(i,j) x Quantum(i,j)
 
 For example, if the DC coefficient (i.e., DCT(0,0)) for a particular
 block was equal to 25, then the quantization of this value using
-[Table 1](#quant) would result in
+:numref:`Table %s <tab-quant>` would result in
 
-```pseudo
-Floor(25/3+0.5) = 8
-```
+::
 
-During decompression, this coefficient would then be restored as
-8 $$\times$$ 3 = 24.
+   Floor(25/3+0.5) = 8
 
-### Encoding Phase
+During decompression, this coefficient would then be restored as 8 × 3 =
+24.
 
-The final phase of JPEG encodes the quantized frequency coefficients in
-a compact form. This results in additional compression, but this
+Encoding Phase
+~~~~~~~~~~~~~~
+
+The final phase of JPEG encodes the quantized frequency coefficients
+in a compact form. This results in additional compression, but this
 compression is lossless. Starting with the DC coefficient in position
 (0,0), the coefficients are processed in the zigzag sequence shown in
-[Figure 3](#zigzag). Along this zigzag, a form of run length encoding
-is used—RLE is applied to only the 0 coefficients, which is
-significant because many of the later coefficients are 0. The individual
-coefficient values are then encoded using a Huffman code. (The JPEG
-standard allows the implementer to use an arithmetic coding instead of
-the Huffman code.)
+:numref:`Figure %s <fig-zigzag>`. Along this zigzag, a form of run
+length encoding is used—RLE is applied to only the 0 coefficients,
+which is significant because many of the later coefficients are 0. The
+individual coefficient values are then encoded using a Huffman
+code. (The JPEG standard allows the implementer to use an arithmetic
+coding instead of the Huffman code.)
 
-<figure class="line">
-	<a id="zigzag"></a>
-	<img src="figures/f07-13-9780123850591.png" width="300px"/>
-	<figcaption>Zigzag traversal of quantized frequency coefficients.</figcaption>
-</figure>
+.. _fig-zigzag:
+.. figure:: figures/f07-13-9780123850591.png
+   :width: 300px
+   :align: center
+
+   Zigzag traversal of quantized frequency coefficients.
 
 In addition, because the DC coefficient contains a large percentage of
-the information about the 8 $$\times$$ 8 block from the source image, and
-images typically change slowly from block to block, each DC coefficient
-is encoded as the difference from the previous DC coefficient. This is
-the delta encoding approach described in a later section.
+the information about the 8 × 8 block from the source image, and images
+typically change slowly from block to block, each DC coefficient is
+encoded as the difference from the previous DC coefficient. This is the
+delta encoding approach described in a later section.
 
 JPEG includes a number of variations that control how much compression
 you achieve versus the fidelity of the image. This can be done, for
@@ -492,26 +511,27 @@ achieved with JPEG. Ratios of 30:1 are common, and higher ratios are
 certainly possible, but *artifacts* (noticeable distortion due to
 compression) become more severe at higher ratios.
 
-## Video Compression (MPEG)
+Video Compression (MPEG)
+------------------------
 
 We now turn our attention to the MPEG format, named after the Moving
 Picture Experts Group that defined it. To a first approximation, a
-moving picture (i.e., video) is simply a succession of still
-images—also called *frames* or *pictures*—displayed at some video
-rate. Each of these frames can be compressed using the same DCT-based
-technique used in JPEG. Stopping at this point would be a mistake,
-however, because it fails to remove the interframe redundancy present in
-a video sequence. For example, two successive frames of video will
-contain almost identical information if there is not much motion in the
-scene, so it would be unnecessary to send the same information twice.
-Even when there is motion, there may be plenty of redundancy since a
-moving object may not change from one frame to the next; in some cases,
-only its position changes. MPEG takes this interframe redundancy into
-consideration. MPEG also defines a mechanism for encoding an audio
-signal with the video, but we consider only the video aspect of MPEG in
-this section.
+moving picture (i.e., video) is simply a succession of still images—also
+called *frames* or *pictures*—displayed at some video rate. Each of
+these frames can be compressed using the same DCT-based technique used
+in JPEG. Stopping at this point would be a mistake, however, because it
+fails to remove the interframe redundancy present in a video sequence.
+For example, two successive frames of video will contain almost
+identical information if there is not much motion in the scene, so it
+would be unnecessary to send the same information twice. Even when there
+is motion, there may be plenty of redundancy since a moving object may
+not change from one frame to the next; in some cases, only its position
+changes. MPEG takes this interframe redundancy into consideration. MPEG
+also defines a mechanism for encoding an audio signal with the video,
+but we consider only the video aspect of MPEG in this section.
 
-### Frame Types
+Frame Types
+~~~~~~~~~~~
 
 MPEG takes a sequence of video frames as input and compresses them into
 three types of frames, called *I frames* (intrapicture), *P frames*
@@ -526,13 +546,14 @@ frame. More specifically, a P frame specifies the differences from the
 previous I frame, while a B frame gives an interpolation between the
 previous and subsequent I or P frames.
 
-<figure class="line">
-	<a id="mpeg"></a>
-	<img src="figures/f07-14-9780123850591.png" width="500px"/>
-	<figcaption>Sequence of I, P, and B frames generated by MPEG.</figcaption>
-</figure>
+.. _fig-mpeg:
+.. figure:: figures/f07-14-9780123850591.png
+   :width: 500px
+   :align: center
 
-[Figure 4](#mpeg) illustrates a sequence of seven video frames that,
+   Sequence of I, P, and B frames generated by MPEG.
+
+:numref:`Figure %s <fig-mpeg>` illustrates a sequence of seven video frames that,
 after being compressed by MPEG, result in a sequence of I, P, and B
 frames. The two I frames stand alone; each can be decompressed at the
 receiver independently of any other frames. The P frame depends on the
@@ -543,13 +564,13 @@ reference frames must arrive at the receiver before MPEG can decompress
 the B frame to reproduce the original video frame.
 
 Note that, because each B frame depends on a later frame in the
-sequence, the compressed frames are not transmitted in sequential order.
-Instead, the sequence I B B P B B I shown in [Figure 4](#mpeg) is
-transmitted as I P B B I B B. Also, MPEG does not define the ratio of
-I frames to P and B frames; this ratio may vary depending on the
-required compression and picture quality. For example, it is permissible
-to transmit only I frames. This would be similar to using JPEG to
-compress the video.
+sequence, the compressed frames are not transmitted in sequential
+order.  Instead, the sequence I B B P B B I shown in :numref:`Figure
+%s <fig-mpeg>` is transmitted as I P B B I B B. Also, MPEG does not
+define the ratio of I frames to P and B frames; this ratio may vary
+depending on the required compression and picture quality. For
+example, it is permissible to transmit only I frames. This would be
+similar to using JPEG to compress the video.
 
 In contrast to the preceding discussion of JPEG, the following focuses
 on the *decoding* of an MPEG stream. It is a little easier to describe,
@@ -558,26 +579,26 @@ systems today, since MPEG coding is so expensive that it is frequently
 done offline (i.e., not in real time). For example, in a video-on-demand
 system, the video would be encoded and stored on disk ahead of time.
 When a viewer wanted to watch the video, the MPEG stream would then be
-transmitted to the viewer's machine, which would decode and display the
+transmitted to the viewer’s machine, which would decode and display the
 stream in real time.
 
-Let's look more closely at the three frame types. As mentioned above,
+Let’s look more closely at the three frame types. As mentioned above,
 I frames are approximately equal to the JPEG compressed version of the
-source frame. The main difference is that MPEG works in units of
-16 $$\times$$ 16 macroblocks. For a color video represented in YUV, the
-U and V components in each macroblock are subsampled into
-an 8 $$\times$$ 8 block, as we discussed above in the context of JPEG.
-Each 2 $$\times$$ 2
-subblock in the macroblock is given by one U value and one V value—the
-average of the four pixel values. The subblock still has four Y values.
-The relationship between a frame and the corresponding macroblocks is
-given in [Figure 5](#macroblock).
+source frame. The main difference is that MPEG works in units of 16 × 16
+macroblocks. For a color video represented in YUV, the U and V
+components in each macroblock are subsampled into an 8 × 8 block, as we
+discussed above in the context of JPEG. Each 2 × 2 subblock in the
+macroblock is given by one U value and one V value—the average of the
+four pixel values. The subblock still has four Y values. The
+relationship between a frame and the corresponding macroblocks is given
+in :numref:`Figure %s <fig-macroblock>`.
 
-<figure class="line">
-	<a id="macroblock"></a>
-	<img src="figures/f07-15-9780123850591.png" width="500px"/>
-	<figcaption>Each frame as a collection of macroblocks.</figcaption>
-</figure>
+.. _fig-macroblock:
+.. figure:: figures/f07-15-9780123850591.png
+   :width: 500px
+   :align: center
+
+   Each frame as a collection of macroblocks.
 
 The P and B frames are also processed in units of macroblocks.
 Intuitively, we can see that the information they carry for each
@@ -601,29 +622,30 @@ discussion, however, we consider only the general case in which the
 macroblock uses bidirectional predictive encoding.
 
 In such a case, each macroblock in a B frame is represented with a
-4-tuple: (1) a coordinate for the macroblock in the frame, (2) a motion
-vector relative to the previous reference frame, (3) a motion vector
-relative to the subsequent reference frame, and (4) a delta ($$\delta$$)
-for each pixel in the macroblock (i.e., how much each pixel has changed
-relative to the two reference pixels). For each pixel in the macroblock,
-the first task is to find the corresponding reference pixel in the past
-and future reference frames. This is done using the two motion vectors
-associated with the macroblock. Then, the delta for the pixel is added
-to the average of these two reference pixels. Stated more precisely, if
-we let $$F_p$$ and $$F_f$$ denote the past and future reference frames,
-respectively, and the past/future motion vectors are given by
-$$(x_p,y_p)$$ and $$(x_f,y_f)$$, then the pixel at coordinate
-$$(x,y)$$ in the current frame (denoted $$F_c$$) is computed as
+4-tuple: (1) a coordinate for the macroblock in the frame, (2) a
+motion vector relative to the previous reference frame, (3) a motion
+vector relative to the subsequent reference frame, and (4) a delta
+(:math:`\delta`) for each pixel in the macroblock (i.e., how much each
+pixel has changed relative to the two reference pixels). For each
+pixel in the macroblock, the first task is to find the corresponding
+reference pixel in the past and future reference frames. This is done
+using the two motion vectors associated with the macroblock. Then, the
+delta for the pixel is added to the average of these two reference
+pixels. Stated more precisely, if we let F\ :sub:`p` and F\ :sub:`f`
+denote the past and future reference frames, respectively, and the
+past/future motion vectors are given by (x\ :sub:`p`, y\ :sub:`p`) and
+(x\ :sub:`f`, y\ :sub:`f`), then the pixel at coordinate *(x,y)* in the current
+frame (denoted F\ :sub:`c`) is computed as
 
-$$
-F_c(x,y) = (F_p(x+x_p,y+y_p) + F_f(x+x_f,y+y_f))/2 + \delta(x,y)
-$$
+.. math::
 
-where $$\delta$$ is the delta for the pixel as specified in the B frame.
-These deltas are encoded in the same way as pixels in I frames; that is,
-they are run through DCT and then quantized. Since the deltas are
-typically small, most of the DCT coefficients are 0 after quantization;
-hence, they can be effectively compressed.
+   F_c(x,y) = (F_p(x+x_p,y+y_p) + F_f(x+x_f,y+y_f))/2 + \delta(x,y)
+
+where :math:`\delta` is the delta for the pixel as specified in the B frame. 
+These deltas are encoded in the same way as pixels in I frames; that is, 
+they are run through DCT and then quantized. Since the deltas are typically 
+small, most of the DCT coefficients are 0 after quantization; hence, they can
+be effectively compressed.
 
 It should be fairly clear from the preceding discussion how encoding
 would be performed, with one exception. When generating a B or P frame
@@ -646,7 +668,8 @@ only defines the format for encoding this information in B and P frames
 and the algorithm for reconstructing the pixel during decompression, as
 given above.
 
-### Effectiveness and Performance
+Effectiveness and Performance
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 MPEG typically achieves a compression ratio of 90:1, although ratios as
 high as 150:1 are not unheard of. In terms of the individual frame
@@ -670,7 +693,8 @@ to keep pace with 30-frames-per-second video rates when decoding MPEG
 streams purely in software—modern processors can even decode MPEG
 streams of high definition video (HDTV).
 
-### Video Encoding Standards
+Video Encoding Standards
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 We conclude by noting that MPEG is an evolving standard of significant
 complexity. This complexity comes from a desire to give the encoding
@@ -679,26 +703,27 @@ video stream, resulting in different video transmission rates. It also
 comes from the evolution of the standard over time, with the Moving
 Picture Experts Group working hard to retain backwards compatibility
 (e.g., MPEG-1, MPEG-2, MPEG-4). What we describe in this book is the
-essential ideas underlying MPEG-based compression, but certainly not
-all the intricacies involved in an international standard.
+essential ideas underlying MPEG-based compression, but certainly not all
+the intricacies involved in an international standard.
 
-What's more, MPEG is not the only standard available for encoding
-video. For example, the ITU-T has also defined the *H series*
-for encoding real-time multimedia data. Generally, the H series
-includes standards for video, audio, control, and multiplexing (e.g.,
-mixing audio, video, and data onto a single bit stream). Within the
-series, H.261 and H.263 were the first- and second-generation video
-encoding standards. In principle, both H.261 and H.263 look a lot 
-like MPEG: They use DCT, quantization, and interframe compression. The 
-differences between H.261/H.263 and MPEG are in the details.
+What’s more, MPEG is not the only standard available for encoding video.
+For example, the ITU-T has also defined the *H series* for encoding
+real-time multimedia data. Generally, the H series includes standards
+for video, audio, control, and multiplexing (e.g., mixing audio, video,
+and data onto a single bit stream). Within the series, H.261 and H.263
+were the first- and second-generation video encoding standards. In
+principle, both H.261 and H.263 look a lot like MPEG: They use DCT,
+quantization, and interframe compression. The differences between
+H.261/H.263 and MPEG are in the details.
 
 Today, a partnership between the ITU-T and the MPEG group has lead to
 the joint H.264/MPEG-4 standard, which is used for both Blu-ray Discs
 and by many popular streaming sources (e.g., YouTube, Vimeo).
 
-## Transmitting MPEG over a Network
+Transmitting MPEG over a Network
+--------------------------------
 
-As we've noted, MPEG and JPEG are not just compression standards but
+As we’ve noted, MPEG and JPEG are not just compression standards but
 also definitions of the format of video and images, respectively.
 Focusing on MPEG, the first thing to keep in mind is that it defines the
 format of a video *stream*; it does not specify how this stream is
@@ -708,49 +733,49 @@ connection, like that provided by TCP.
 
 What we describe below is called the *main profile* of an MPEG video
 stream that is being sent over a network. You can think of an MPEG
-profile as being analogous to a "version," except the profile is not
+profile as being analogous to a “version,” except the profile is not
 explicitly specified in an MPEG header; the receiver has to deduce the
 profile from the combination of header fields it sees.
 
-<figure class="line">
-	<a id="nested"></a>
-	<img src="figures/f07-16-9780123850591.png" width="500px"/>
-	<figcaption>Format of an MPEG-compressed video stream.</figcaption>
-</figure>
+.. _fig-nested:
+.. figure:: figures/f07-16-9780123850591.png
+   :width: 500px
+   :align: center
+
+   Format of an MPEG-compressed video stream.
 
 A main profile MPEG stream has a nested structure, as illustrated in
-[Figure 6](#nested). (Keep in mind that this figure hides a *lot* of
-messy details.) At the outermost level, the video contains a sequence of
-groups of pictures (GOP) separated by a `SeqHdr`. The sequence is
-terminated by a `SeqEndCode` (`0xb7`). The `SeqHdr` that precedes
-every GOP specifies—among other things—the size of each picture
-(frame) in the GOP (measured in both pixels and macroblocks), the
-interpicture period (measured in $$\mu$$s), and two quantization matrices
-for the macroblocks within this GOP: one for intracoded macroblocks
-(I blocks) and one for intercoded macroblocks (B and P blocks). Since
-this information is given for each GOP—rather than once for the entire
-video stream, as you might expect—it is possible to change the
-quantization table and frame rate at GOP boundaries throughout the
-video. This makes it possible to adapt the video stream over time, as we
-discuss below.
+:numref:`Figure %s <fig-nested>`. (Keep in mind that this figure hides
+a *lot* of messy details.) At the outermost level, the video contains
+a sequence of groups of pictures (GOP) separated by a ``SeqHdr``. The
+sequence is terminated by a ``SeqEndCode`` (``0xb7``). The ``SeqHdr``
+that precedes every GOP specifies—among other things—the size of each
+picture (frame) in the GOP (measured in both pixels and macroblocks),
+the interpicture period (measured in μs), and two quantization
+matrices for the macroblocks within this GOP: one for intracoded
+macroblocks (I blocks) and one for intercoded macroblocks (B and
+P blocks). Since this information is given for each GOP—rather than
+once for the entire video stream, as you might expect—it is possible
+to change the quantization table and frame rate at GOP boundaries
+throughout the video. This makes it possible to adapt the video stream
+over time, as we discuss below.
 
-Each GOP is given by a `GOPHdr`, followed by the set of pictures that
-make up the GOP. The `GOPHdr` specifies the number of pictures in the
+Each GOP is given by a ``GOPHdr``, followed by the set of pictures that
+make up the GOP. The ``GOPHdr`` specifies the number of pictures in the
 GOP, as well as synchronization information for the GOP (i.e., when the
 GOP should play, relative to the beginning of the video). Each picture,
-in turn, is given by a `PictureHdr` and a set of *slices* that make up
+in turn, is given by a ``PictureHdr`` and a set of *slices* that make up
 the picture. (A slice is a region of the picture, such as one horizontal
-line.) The `PictureHdr` identifies the type of the picture (I, B, or
-P) and defines a picture-specific quantization table. The `SliceHdr`
+line.) The ``PictureHdr`` identifies the type of the picture (I, B, or
+P) and defines a picture-specific quantization table. The ``SliceHdr``
 gives the vertical position of the slice, plus another opportunity to
 change the quantization table—this time by a constant scaling factor
-rather than by giving a whole new table. Next, the `SliceHdr` is
+rather than by giving a whole new table. Next, the ``SliceHdr`` is
 followed by a sequence of macroblocks. Finally, each macroblock includes
 a header that specifies the block address within the picture, along with
 data for the six blocks within the macroblock: one for the U component,
 one for the V component, and four for the Y component. (Recall that the
-Y component is 16 $$\times$$ 16, while the U and V components are
-8 $$\times$$ 8.)
+Y component is 16 × 16, while the U and V components are 8 × 8.)
 
 It should be clear that one of the powers of the MPEG format is that it
 gives the encoder an opportunity to change the encoding over time. It
@@ -792,90 +817,87 @@ lower drop probability than other packets.
 
 One final observation is that how you choose to encode video depends on
 more than just the available network bandwidth. It also depends on the
-application's latency constraints. Once again, an interactive
+application’s latency constraints. Once again, an interactive
 application like videoconferencing needs small latencies. The critical
 factor is the combination of I, P, and B frames in the GOP. Consider the
 following GOP:
 
-{% center %}
-I B B B B P B B B B I
-{% endcenter %}
+.. centered:: I B B B B P B B B B I
 
 The problem this GOP causes a videoconferencing application is that the
 sender has to delay the transmission of the four B frames until the P or
 I that follows them is available. This is because each B frame depends
 on the subsequent P or I frame. If the video is playing at 15 frames per
 second (i.e., one frame every 67 ms), this means the first B frame is
-delayed 4 $$\times$$ 67 ms, which is more than a quarter of a second.
-This delay is in addition to any propagation delay imposed by the
-network. A quarter of a second is far greater than the 100-ms
-threshold that humans are able to perceive. It is for this reason that
-many videoconference applications encode video using JPEG, which is
-often called motion-JPEG. (Motion-JPEG also addresses the problem of
-dropping a reference frame since all frames are able to stand alone.)
-Notice, however, that an interframe encoding that depends upon only
-prior frames rather than later frames is not a problem. Thus, a GOP of
+delayed 4 × 67 ms, which is more than a quarter of a second. This delay
+is in addition to any propagation delay imposed by the network. A
+quarter of a second is far greater than the 100-ms threshold that humans
+are able to perceive. It is for this reason that many videoconference
+applications encode video using JPEG, which is often called motion-JPEG.
+(Motion-JPEG also addresses the problem of dropping a reference frame
+since all frames are able to stand alone.) Notice, however, that an
+interframe encoding that depends upon only prior frames rather than
+later frames is not a problem. Thus, a GOP of
 
-{% center %}
-I P P P P I
-{% endcenter %}
+.. centered:: I P P P P I
 
 would work just fine for interactive videoconferencing.
 
-### Adaptive Streaming
+Adaptive Streaming
+~~~~~~~~~~~~~~~~~~
 
 Because encoding schemes like MPEG allow for a trade-off between the
-bandwidth consumed and the quality of the image, there is an
-opportunity to adapt a video stream to match the available network
-bandwidth. This is effectively what video streaming services like
-Netflix do today.
+bandwidth consumed and the quality of the image, there is an opportunity
+to adapt a video stream to match the available network bandwidth. This
+is effectively what video streaming services like Netflix do today.
 
-For starters, let's assume that we have some way to measure the amount
+For starters, let’s assume that we have some way to measure the amount
 of free capacity and level of congestion along a path, for example, by
 observing the rate at which packets are successfully arriving at the
 destination. As the available bandwidth fluctuates, we can feed that
 information back to the codec so that it adjusts its coding parameters
 to back off during congestion and to send more aggressively (with a
 higher picture quality) when the network is idle. This is analogous to
-the behavior of TCP, except in the video case we are actually
-modifying the total amount of data sent rather than how long we take
-to send a fixed amount of data, since we don't want to introduce delay
-into a video application.
+the behavior of TCP, except in the video case we are actually modifying
+the total amount of data sent rather than how long we take to send a
+fixed amount of data, since we don’t want to introduce delay into a
+video application.
 
-In the case of video-on-demand services like Netflix, we don't adapt
-the encoding on the fly, but instead we encode a handful of video
-quality levels ahead of time, and save them to files named accordingly.
-The receiver simply changes the file name it requests to match the
-quality its measurements indicate the network will be able to deliver.
-The receiver watches its playback queue, and asks for a higher
-quality encoding when the queue becomes too full and a lower quality
-encoding when the queue becomes too empty.
+In the case of video-on-demand services like Netflix, we don’t adapt the
+encoding on the fly, but instead we encode a handful of video quality
+levels ahead of time, and save them to files named accordingly. The
+receiver simply changes the file name it requests to match the quality
+its measurements indicate the network will be able to deliver. The
+receiver watches its playback queue, and asks for a higher quality
+encoding when the queue becomes too full and a lower quality encoding
+when the queue becomes too empty.
 
-How does this approach know where in the movie to jump to should
-the requested quality change? In effect, the receiver never asks the
-sender to stream the whole movie, but instead it requests a sequence
-of short movie segments, typically a few seconds long (and always on
-GOP boundary). Each segment is an opportunity to change the quality
-level to match what the network is able to deliver. (It turns out that
-requesting movie chunks also makes it easier to implement *trick
-play*, jumping around from one place to another in the movie.) In
-other words, a movie is typically stored as a set of N $$\times$$ M
-chunks (files): N quality levels for each of M segments.
+How does this approach know where in the movie to jump to should the
+requested quality change? In effect, the receiver never asks the sender
+to stream the whole movie, but instead it requests a sequence of short
+movie segments, typically a few seconds long (and always on GOP
+boundary). Each segment is an opportunity to change the quality level to
+match what the network is able to deliver. (It turns out that requesting
+movie chunks also makes it easier to implement *trick play*, jumping
+around from one place to another in the movie.) In other words, a movie
+is typically stored as a set of N × M chunks (files): N quality levels
+for each of M segments.
 
-There's one last detail. Since the receiver is effectively requesting a
-sequence of discrete video chunks by name, the most common approach
-for issuing these requests is to use HTTP. Each chuck is a separate HTTP
-GET request with the URL identifying the specific chunk the receiver
-wants next. When you start downloading a movie, your video player first
-downloads a *manifest* file that contains nothing more than the URLs
-for the N $$\times$$ M chunks in the movie, and then it issues a
-sequence of HTTP requests using the appropriate URL for the
-situation. This general approach is called *HTTP adaptive streaming*,
-although it has been standardized in slightly different ways by various
-organizations, most notably MPEG's DASH (*Dynamic Adaptive Streaming
-over HTTP*) and Apple's HLS (*HTTP Live Streaming*).
+There’s one last detail. Since the receiver is effectively requesting a
+sequence of discrete video chunks by name, the most common approach for
+issuing these requests is to use HTTP. Each chuck is a separate HTTP GET
+request with the URL identifying the specific chunk the receiver wants
+next. When you start downloading a movie, your video player first
+downloads a *manifest* file that contains nothing more than the URLs for
+the N × M chunks in the movie, and then it issues a sequence of HTTP
+requests using the appropriate URL for the situation. This general
+approach is called *HTTP adaptive streaming*, although it has been
+standardized in slightly different ways by various organizations, most
+notably MPEG’s DASH (*Dynamic Adaptive Streaming over HTTP*) and Apple’s
+HLS (*HTTP Live Streaming*).
 
-## Audio Compression (MP3)
+Audio Compression (MP3)
+-----------------------
 
 Not only does MPEG define how video is compressed, but it also defines a
 standard for compressing audio. This standard can be used to compress
@@ -887,13 +909,12 @@ example, an audio CD).
 To understand audio compression, we need to begin with the data.
 CD-quality audio, which is the *de facto* digital representation for
 high-quality audio, is sampled at a rate of 44.1 KHz (i.e., a sample is
-collected approximately once every 23 $$\mu$$s). Each sample is 16 bits,
-which means that a stereo (2-channel) audio stream results in a bit
-rate of
+collected approximately once every 23 μs). Each sample is 16 bits, which
+means that a stereo (2-channel) audio stream results in a bit rate of
 
-$$
-2 \times 44.1 \times 1000 \times 16 = 1.41\ Mbps
-$$
+.. math::
+
+   2 \times 44.1 \times 1000 \times 16 = 1.41\ Mbps
 
 By comparison, telephone-quality voice is sampled at a rate of 8 KHz,
 with 8-bit samples, resulting in a bit rate of 64 kbps.
@@ -904,30 +925,35 @@ line pair. To make matters worse, synchronization and error correction
 overhead require that 49 bits be used to encode each 16-bit sample,
 resulting in an actual bit rate of
 
-$$
-49/16 \times 1.41\ Mbps = 4.32\ Mbps
-$$
+.. math::
+
+   49/16 \times 1.41\ Mbps = 4.32\ Mbps
 
 MPEG addresses this need by defining three levels of compression, as
-enumerated in [Table 2](#mp3). Of these, Layer III, which is more
+enumerated in :numref:`Table %s <tab-mp3>`. Of these, Layer III, which is more
 widely known as MP3, is the most commonly used.
 
-<a id="mp3"></a>
+.. _tab-mp3:
+.. table:: MP3 Compression Rates. 
+   :widths: auto
+   :align: center
 
-| Coding | Bit Rates | Compression Factor |
-|:---:|:---:|:---:|
-| Layer I | 384 kbps | 14 |
-| Layer II | 192 kbps | 18 |
-| Layer III | 128 kbps | 12 |
-
-{% center %} *Table 2. MP3 Compression Rates.* {% endcenter %}
+   +-----------+-----------+--------------------+
+   | Coding    | Bit Rates | Compression Factor |
+   +===========+===========+====================+
+   | Layer I   | 384 kbps  | 14                 |
+   +-----------+-----------+--------------------+
+   | Layer II  | 192 kbps  | 18                 |
+   +-----------+-----------+--------------------+
+   | Layer III | 128 kbps  | 12                 |
+   +-----------+-----------+--------------------+
 
 To achieve these compression ratios, MP3 uses techniques that are
 similar to those used by MPEG to compress video. First, it splits the
 audio stream into some number of frequency subbands, loosely analogous
 to the way MPEG processes the Y, U, and V components of a video stream
 separately. Second, each subband is broken into a sequence of blocks,
-which are similar to MPEG's macroblocks except they can vary in length
+which are similar to MPEG’s macroblocks except they can vary in length
 from 64 to 1024 samples. (The encoding algorithm can vary the block size
 depending on certain distortion effects that are beyond our discussion.)
 Finally, each block is transformed using a modified DCT algorithm,
